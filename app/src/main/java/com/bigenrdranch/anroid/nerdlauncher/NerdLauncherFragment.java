@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,17 +71,26 @@ public class NerdLauncherFragment extends Fragment {
     private class ActivityHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private ResolveInfo mResolveInfo;
+        private LinearLayout mItemListContainer;
+        private ImageView mIconImageView;
         private TextView mNameTextView;
 
         public ActivityHolder(@NonNull View itemView) {
             super(itemView);
-            mNameTextView = (TextView) itemView;
+            mItemListContainer = (LinearLayout) itemView;
+            mIconImageView = mItemListContainer.findViewById(R.id.image_view_icon_shower);
+
+            mNameTextView = mItemListContainer.findViewById(R.id.text_view_app_name_shower);
             mNameTextView.setOnClickListener(this);
         }
 
         public void bindActivity(ResolveInfo resolveInfo) {
             mResolveInfo = resolveInfo;
             PackageManager pm = getActivity().getPackageManager();
+
+            mIconImageView.setImageDrawable(mResolveInfo.loadIcon(pm));
+            mIconImageView.setOnClickListener(this);
+
             String appName = mResolveInfo.loadLabel(pm).toString();
             mNameTextView.setText(appName);
         }
